@@ -1,0 +1,84 @@
+{
+  "ai": {
+    "api_base": "https://api.deepseek.com",
+    "api_key": "sk-ac532231afe5475a876e1ca96f4404f3",
+    "model": "deepseek-v4-flash"
+  },
+  "download_dir": "D:\\搭建知识库\\个人工作流\\成长日记\\Attachments\\PDFs",
+  "export_dir": "D:\\搭建知识库\\个人工作流\\成长日记\\Attachments",
+  "vault_notes_dir": "D:\\搭建知识库\\个人工作流\\成长日记\\Notes",
+  "cache_ttl_minutes": 60,
+  "filter_from_date": "2026-05-01",
+  "sources": [
+    {
+      "name": "IMF Working Papers",
+      "key": "imf",
+      "url": "https://www.imf.org/en/publications/wp",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": [
+        "imf",
+        "wpiea"
+      ]
+    },
+    {
+      "name": "BOJ 货币政策",
+      "key": "boj",
+      "url": "https://www.boj.or.jp/en/mopo/mpmdeci/state_{year}/index.htm",
+      "source_year": 2026,
+      "enabled": true,
+      "scrape": "auto",
+      "filename_hints": [
+        "boj",
+        "bank of japan"
+      ]
+    },
+    {
+      "name": "ECB 货币政策",
+      "key": "ecb",
+      "url": "https://www.ecb.europa.eu/press/",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": [
+        "ecb",
+        "european central bank"
+      ]
+    },
+    {
+      "name": "BIS 国际清算银行",
+      "key": "bis",
+      "url": "https://www.bis.org/publ/",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": [
+        "bis",
+        "bank for international"
+      ]
+    },
+    {
+      "name": "Fed 美联储",
+      "key": "fed",
+      "url": "https://www.federalreserve.gov/monetarypolicy/",
+      "enabled": true,
+      "scrape": "auto",
+      "filename_hints": [
+        "fed",
+        "federal reserve",
+        "fomc",
+        "beige"
+      ]
+    },
+    {
+      "name": "BOE 英格兰银行",
+      "key": "boe",
+      "url": "https://www.bankofengland.co.uk/monetary-policy/",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": [
+        "boe",
+        "bank of england",
+        "mpc"
+      ]
+    }
+  ]
+}
