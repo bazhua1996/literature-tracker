@@ -11,74 +11,157 @@
   "filter_from_date": "2026-05-01",
   "sources": [
     {
-      "name": "IMF Working Papers",
+      "name": "IMF 国际货币基金组织",
       "key": "imf",
-      "url": "https://www.imf.org/en/publications/wp",
+      "url": "https://www.imf.org/en/Home",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": [
-        "imf",
-        "wpiea"
-      ]
+      "filename_hints": ["imf", "wpiea"]
     },
     {
-      "name": "BOJ 货币政策",
+      "name": "BOJ 日本银行",
       "key": "boj",
       "url": "https://www.boj.or.jp/en/mopo/mpmdeci/state_{year}/index.htm",
       "source_year": 2026,
       "enabled": true,
       "scrape": "auto",
-      "filename_hints": [
-        "boj",
-        "bank of japan"
-      ]
+      "filename_hints": ["boj", "bank of japan"]
     },
     {
-      "name": "ECB 货币政策",
+      "name": "ECB 欧央行",
       "key": "ecb",
-      "url": "https://www.ecb.europa.eu/press/",
+      "url": "https://www.ecb.europa.eu/",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": [
-        "ecb",
-        "european central bank"
-      ]
+      "filename_hints": ["ecb", "european central bank"]
     },
     {
       "name": "BIS 国际清算银行",
       "key": "bis",
-      "url": "https://www.bis.org/publ/",
+      "url": "https://www.bis.org/",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": [
-        "bis",
-        "bank for international"
-      ]
+      "filename_hints": ["bis", "bank for international"]
     },
     {
       "name": "Fed 美联储",
       "key": "fed",
-      "url": "https://www.federalreserve.gov/monetarypolicy/",
+      "url": "https://www.federalreserve.gov/",
       "enabled": true,
       "scrape": "auto",
-      "filename_hints": [
-        "fed",
-        "federal reserve",
-        "fomc",
-        "beige"
-      ]
+      "filename_hints": ["fed", "federal reserve", "fomc", "beige"]
     },
     {
       "name": "BOE 英格兰银行",
       "key": "boe",
-      "url": "https://www.bankofengland.co.uk/monetary-policy/",
+      "url": "https://www.bankofengland.co.uk/",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": [
-        "boe",
-        "bank of england",
-        "mpc"
-      ]
+      "filename_hints": ["boe", "bank of england", "mpc"]
+    },
+    {
+      "name": "世界银行（WB）",
+      "key": "wb",
+      "url": "https://www.worldbank.org/en/home",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": ["world bank", "wb"]
+    },
+    {
+      "name": "经合组织（OECD）",
+      "key": "oecd",
+      "url": "https://www.oecd.org/",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": ["oecd"]
+    },
+    {
+      "name": "世界贸易组织（WTO）",
+      "key": "wto",
+      "url": "https://www.wto.org/",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": ["wto"]
+    },
+    {
+      "name": "美国国家经济研究局（NBER）",
+      "key": "nber",
+      "url": "https://www.nber.org/",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": ["nber"]
+    },
+    {
+      "name": "欧洲经济政策研究中心（CEPR）",
+      "key": "cepr",
+      "url": "https://www.cepr.org/",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": ["cepr"]
+    },
+    {
+      "name": "欧盟委员会",
+      "key": "eu",
+      "url": "https://commission.europa.eu/index_en",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": ["european commission", "eu"]
+    },
+    {
+      "name": "亚洲开发银行（ADB）",
+      "key": "adb",
+      "url": "https://www.adb.org/",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": ["adb", "asian development"]
+    },
+    {
+      "name": "亚洲基础设施投资银行（AIIB）",
+      "key": "aiib",
+      "url": "https://www.aiib.org/",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": ["aiib"]
+    },
+    {
+      "name": "欧洲投资银行（EIB）",
+      "key": "eib",
+      "url": "https://www.eib.org/en/",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": ["eib", "european investment"]
+    },
+    {
+      "name": "欧洲复兴开发银行（EBRD）",
+      "key": "ebrd",
+      "url": "https://www.ebrd.com/home",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": ["ebrd"]
+    },
+    {
+      "name": "世界经济论坛（WEF）",
+      "key": "wef",
+      "url": "https://www.weforum.org/",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": ["wef", "world economic forum"]
+    },
+    {
+      "name": "彼得森国际经济研究所（PIIE）",
+      "key": "piie",
+      "url": "https://www.piie.com/",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": ["piie", "peterson"]
+    },
+    {
+      "name": "布鲁盖尔研究所（Bruegel）",
+      "key": "bruegel",
+      "url": "https://www.bruegel.org/",
+      "enabled": true,
+      "scrape": "manual",
+      "filename_hints": ["bruegel"]
     }
   ]
 }

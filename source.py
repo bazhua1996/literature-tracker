@@ -39,6 +39,18 @@ _BUILTIN_STYLE_GUIDES: dict[str, str] = {
     "bis": "- 偏宏观审慎\n- 关注全球金融稳定和系统性风险\n- 政策启示侧重宏观审慎政策",
     "fed": "- 偏货币政策\n- 关注利率决议和就业/通胀双目标\n- 政策启示侧重央行独立性",
     "boe": "- 偏货币政策\n- 关注通胀目标和金融稳定\n- 政策启示侧重央行沟通",
+    "wb": "- 偏发展经济学\n- 关注全球发展、减贫和基础设施建设\n- 政策启示侧重国际发展合作",
+    "oecd": "- 偏政策分析\n- 关注经济展望、结构性改革和跨国比较\n- 政策启示侧重最佳实践和标准",
+    "wto": "- 偏贸易政策\n- 关注全球贸易规则、争端解决和市场准入\n- 政策启示侧重贸易自由化",
+    "nber": "- 偏学术研究\n- 关注前沿经济学实证研究\n- 政策启示侧重学术发现的政策含义",
+    "cepr": "- 偏政策研究\n- 关注欧洲经济政策议题\n- 政策启示侧重欧洲经验借鉴",
+    "adb": "- 偏区域发展\n- 关注亚洲基础设施建设、区域合作和可持续发展\n- 政策启示侧重区域经验",
+    "aiib": "- 偏基础设施融资\n- 关注可持续基础设施和跨境互联互通\n- 政策启示侧重多边融资机制",
+    "eib": "- 偏投资银行业务\n- 关注气候融资、创新投资和中小企业支持\n- 政策启示侧重政策性金融",
+    "ebrd": "- 偏转型经济\n- 关注市场经济转型和私营部门发展\n- 政策启示侧重制度转型经验",
+    "wef": "- 偏全球议题\n- 关注竞争力、第四次工业革命和全球风险\n- 政策启示侧重前瞻性趋势",
+    "piie": "- 偏国际经济政策\n- 关注贸易、汇率和全球治理\n- 政策启示侧重美国视角的国际经济政策",
+    "bruegel": "- 偏欧洲经济政策\n- 关注创新、竞争和数字政策\n- 政策启示侧重欧洲前沿研究",
 }
 
 _BUILTIN_LABELS: dict[str, str] = {
@@ -48,6 +60,19 @@ _BUILTIN_LABELS: dict[str, str] = {
     "bis": "BIS（国际清算银行）",
     "fed": "Fed（美联储）",
     "boe": "BOE（英格兰银行）",
+    "wb": "WB（世界银行）",
+    "oecd": "OECD（经合组织）",
+    "wto": "WTO（世界贸易组织）",
+    "nber": "NBER（美国国家经济研究局）",
+    "cepr": "CEPR（欧洲经济政策研究中心）",
+    "adb": "ADB（亚洲开发银行）",
+    "aiib": "AIIB（亚投行）",
+    "eib": "EIB（欧洲投资银行）",
+    "ebrd": "EBRD（欧洲复兴开发银行）",
+    "wef": "WEF（世界经济论坛）",
+    "piie": "PIIE（彼得森研究所）",
+    "bruegel": "Bruegel（布鲁盖尔研究所）",
+    "eu": "EU（欧盟委员会）",
 }
 
 _BUILTIN_ICONS: dict[str, str] = {
@@ -62,6 +87,18 @@ _BUILTIN_INSTITUTION_KEYWORDS: dict[str, list] = {
     "bis": [("Bank for International Settlements", "BIS")],
     "fed": [("Federal Reserve", "Fed")],
     "boe": [("Bank of England", "BOE")],
+    "wb": [("World Bank", "WB")],
+    "oecd": [("Organisation for Economic Co-operation and Development", "OECD"), ("Organization for Economic Cooperation and Development", "OECD")],
+    "wto": [("World Trade Organization", "WTO")],
+    "nber": [("National Bureau of Economic Research", "NBER")],
+    "cepr": [("Centre for Economic Policy Research", "CEPR")],
+    "adb": [("Asian Development Bank", "ADB")],
+    "aiib": [("Asian Infrastructure Investment Bank", "AIIB")],
+    "eib": [("European Investment Bank", "EIB")],
+    "ebrd": [("European Bank for Reconstruction and Development", "EBRD")],
+    "wef": [("World Economic Forum", "WEF")],
+    "piie": [("Peterson Institute for International Economics", "PIIE")],
+    "bruegel": [("Bruegel", "Bruegel")],
 }
 
 _DEFAULT_STYLE_GUIDE = "- 偏数据叙事\n- 关注核心发现和趋势\n- 政策启示侧重可借鉴经验"

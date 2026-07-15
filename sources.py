@@ -601,6 +601,138 @@ def fetch_boe(cache_ttl: int = 60) -> list[dict]:
     ]
 
 
+# ── WB（世界银行）──
+WB_URL = "https://www.worldbank.org/en/home"
+
+def fetch_wb(cache_ttl: int = 60) -> list[dict]:
+    return [
+        {"title": "→ 打开世界银行研究页面", "date": "2099-12-31", "source": "WB", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://www.worldbank.org/en/research", "pdf_url": "", "report_number": ""},
+    ]
+
+
+# ── OECD ──
+OECD_URL = "https://www.oecd.org/"
+
+def fetch_oecd(cache_ttl: int = 60) -> list[dict]:
+    return [
+        {"title": "→ 打开 OECD 出版物页面", "date": "2099-12-31", "source": "OECD", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://www.oecd.org/en/publications.html", "pdf_url": "", "report_number": ""},
+        {"title": "→ 打开 OECD 经济展望", "date": "2099-12-31", "source": "OECD", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://www.oecd.org/en/topics/economic-outlook.html", "pdf_url": "", "report_number": ""},
+    ]
+
+
+# ── WTO ──
+WTO_URL = "https://www.wto.org/"
+
+def fetch_wto(cache_ttl: int = 60) -> list[dict]:
+    return [
+        {"title": "→ 打开 WTO 出版物页面", "date": "2099-12-31", "source": "WTO", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://www.wto.org/english/res_e/res_e.htm", "pdf_url": "", "report_number": ""},
+    ]
+
+
+# ── NBER ──
+NBER_URL = "https://www.nber.org/"
+
+def fetch_nber(cache_ttl: int = 60) -> list[dict]:
+    return [
+        {"title": "→ 打开 NBER 工作论文", "date": "2099-12-31", "source": "NBER", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://www.nber.org/papers", "pdf_url": "", "report_number": ""},
+    ]
+
+
+# ── CEPR ──
+CEPR_URL = "https://www.cepr.org/"
+
+def fetch_cepr(cache_ttl: int = 60) -> list[dict]:
+    return [
+        {"title": "→ 打开 CEPR 讨论论文", "date": "2099-12-31", "source": "CEPR", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://cepr.org/publications", "pdf_url": "", "report_number": ""},
+    ]
+
+
+# ── EU Commission ──
+EU_URL = "https://commission.europa.eu/index_en"
+
+def fetch_eu(cache_ttl: int = 60) -> list[dict]:
+    return [
+        {"title": "→ 打开欧盟委员会经济金融出版物", "date": "2099-12-31", "source": "EU", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://economy-finance.ec.europa.eu/publications_en", "pdf_url": "", "report_number": ""},
+    ]
+
+
+# ── ADB ──
+ADB_URL = "https://www.adb.org/"
+
+def fetch_adb(cache_ttl: int = 60) -> list[dict]:
+    return [
+        {"title": "→ 打开 ADB 出版物", "date": "2099-12-31", "source": "ADB", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://www.adb.org/publications", "pdf_url": "", "report_number": ""},
+    ]
+
+
+# ── AIIB ──
+AIIB_URL = "https://www.aiib.org/"
+
+def fetch_aiib(cache_ttl: int = 60) -> list[dict]:
+    return [
+        {"title": "→ 打开 AIIB 研究与出版物", "date": "2099-12-31", "source": "AIIB", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://www.aiib.org/en/news-events/research/index.html", "pdf_url": "", "report_number": ""},
+    ]
+
+
+# ── EIB ──
+EIB_URL = "https://www.eib.org/en/"
+
+def fetch_eib(cache_ttl: int = 60) -> list[dict]:
+    return [
+        {"title": "→ 打开 EIB 研究报告", "date": "2099-12-31", "source": "EIB", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://www.eib.org/en/publications/research/index.htm", "pdf_url": "", "report_number": ""},
+    ]
+
+
+# ── EBRD ──
+EBRD_URL = "https://www.ebrd.com/home"
+
+def fetch_ebrd(cache_ttl: int = 60) -> list[dict]:
+    return [
+        {"title": "→ 打开 EBRD 出版物", "date": "2099-12-31", "source": "EBRD", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://www.ebrd.com/publications", "pdf_url": "", "report_number": ""},
+    ]
+
+
+# ── WEF ──
+WEF_URL = "https://www.weforum.org/"
+
+def fetch_wef(cache_ttl: int = 60) -> list[dict]:
+    return [
+        {"title": "→ 打开 WEF 报告", "date": "2099-12-31", "source": "WEF", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://www.weforum.org/publications/", "pdf_url": "", "report_number": ""},
+    ]
+
+
+# ── PIIE ──
+PIIE_URL = "https://www.piie.com/"
+
+def fetch_piie(cache_ttl: int = 60) -> list[dict]:
+    return [
+        {"title": "→ 打开 PIIE 研究报告", "date": "2099-12-31", "source": "PIIE", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://www.piie.com/research", "pdf_url": "", "report_number": ""},
+    ]
+
+
+# ── Bruegel ──
+BRUEGEL_URL = "https://www.bruegel.org/"
+
+def fetch_bruegel(cache_ttl: int = 60) -> list[dict]:
+    return [
+        {"title": "→ 打开 Bruegel 出版物", "date": "2099-12-31", "source": "Bruegel", "authors": "",
+         "paper_type": "🌐 手动浏览", "detail_url": "https://www.bruegel.org/publications", "pdf_url": "", "report_number": ""},
+    ]
+
+
 # ═══════════════════════════════════════════
 #  源注册（新增来源在此注册 + config.json 添加条目即可）
 # ═══════════════════════════════════════════
@@ -611,3 +743,16 @@ register_fetcher("ecb", fetch_ecb)
 register_fetcher("bis", fetch_bis)
 register_fetcher("fed", fetch_fed)
 register_fetcher("boe", fetch_boe)
+register_fetcher("wb", fetch_wb)
+register_fetcher("oecd", fetch_oecd)
+register_fetcher("wto", fetch_wto)
+register_fetcher("nber", fetch_nber)
+register_fetcher("cepr", fetch_cepr)
+register_fetcher("eu", fetch_eu)
+register_fetcher("adb", fetch_adb)
+register_fetcher("aiib", fetch_aiib)
+register_fetcher("eib", fetch_eib)
+register_fetcher("ebrd", fetch_ebrd)
+register_fetcher("wef", fetch_wef)
+register_fetcher("piie", fetch_piie)
+register_fetcher("bruegel", fetch_bruegel)
