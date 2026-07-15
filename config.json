@@ -16,7 +16,10 @@
       "url": "https://www.imf.org/en/Home",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": ["imf", "wpiea"]
+      "filename_hints": [
+        "imf",
+        "wpiea"
+      ]
     },
     {
       "name": "BOJ 日本银行",
@@ -25,7 +28,10 @@
       "source_year": 2026,
       "enabled": true,
       "scrape": "auto",
-      "filename_hints": ["boj", "bank of japan"]
+      "filename_hints": [
+        "boj",
+        "bank of japan"
+      ]
     },
     {
       "name": "ECB 欧央行",
@@ -33,7 +39,10 @@
       "url": "https://www.ecb.europa.eu/",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": ["ecb", "european central bank"]
+      "filename_hints": [
+        "ecb",
+        "european central bank"
+      ]
     },
     {
       "name": "BIS 国际清算银行",
@@ -41,7 +50,10 @@
       "url": "https://www.bis.org/",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": ["bis", "bank for international"]
+      "filename_hints": [
+        "bis",
+        "bank for international"
+      ]
     },
     {
       "name": "Fed 美联储",
@@ -49,39 +61,55 @@
       "url": "https://www.federalreserve.gov/",
       "enabled": true,
       "scrape": "auto",
-      "filename_hints": ["fed", "federal reserve", "fomc", "beige"]
+      "filename_hints": [
+        "fed",
+        "federal reserve",
+        "fomc",
+        "beige"
+      ]
     },
     {
       "name": "BOE 英格兰银行",
       "key": "boe",
       "url": "https://www.bankofengland.co.uk/",
       "enabled": true,
-      "scrape": "manual",
-      "filename_hints": ["boe", "bank of england", "mpc"]
+      "scrape": "auto",
+      "filename_hints": [
+        "boe",
+        "bank of england",
+        "mpc"
+      ]
     },
     {
       "name": "世界银行（WB）",
       "key": "wb",
       "url": "https://www.worldbank.org/en/home",
       "enabled": true,
-      "scrape": "manual",
-      "filename_hints": ["world bank", "wb"]
+      "scrape": "auto",
+      "filename_hints": [
+        "world bank",
+        "wb"
+      ]
     },
     {
       "name": "经合组织（OECD）",
       "key": "oecd",
       "url": "https://www.oecd.org/",
       "enabled": true,
-      "scrape": "manual",
-      "filename_hints": ["oecd"]
+      "scrape": "auto",
+      "filename_hints": [
+        "oecd"
+      ]
     },
     {
       "name": "世界贸易组织（WTO）",
       "key": "wto",
       "url": "https://www.wto.org/",
       "enabled": true,
-      "scrape": "manual",
-      "filename_hints": ["wto"]
+      "scrape": "auto",
+      "filename_hints": [
+        "wto"
+      ]
     },
     {
       "name": "美国国家经济研究局（NBER）",
@@ -89,15 +117,19 @@
       "url": "https://www.nber.org/",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": ["nber"]
+      "filename_hints": [
+        "nber"
+      ]
     },
     {
       "name": "欧洲经济政策研究中心（CEPR）",
       "key": "cepr",
       "url": "https://www.cepr.org/",
       "enabled": true,
-      "scrape": "manual",
-      "filename_hints": ["cepr"]
+      "scrape": "auto",
+      "filename_hints": [
+        "cepr"
+      ]
     },
     {
       "name": "欧盟委员会",
@@ -105,7 +137,10 @@
       "url": "https://commission.europa.eu/index_en",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": ["european commission", "eu"]
+      "filename_hints": [
+        "european commission",
+        "eu"
+      ]
     },
     {
       "name": "亚洲开发银行（ADB）",
@@ -113,7 +148,10 @@
       "url": "https://www.adb.org/",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": ["adb", "asian development"]
+      "filename_hints": [
+        "adb",
+        "asian development"
+      ]
     },
     {
       "name": "亚洲基础设施投资银行（AIIB）",
@@ -121,7 +159,9 @@
       "url": "https://www.aiib.org/",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": ["aiib"]
+      "filename_hints": [
+        "aiib"
+      ]
     },
     {
       "name": "欧洲投资银行（EIB）",
@@ -129,7 +169,10 @@
       "url": "https://www.eib.org/en/",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": ["eib", "european investment"]
+      "filename_hints": [
+        "eib",
+        "european investment"
+      ]
     },
     {
       "name": "欧洲复兴开发银行（EBRD）",
@@ -137,7 +180,9 @@
       "url": "https://www.ebrd.com/home",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": ["ebrd"]
+      "filename_hints": [
+        "ebrd"
+      ]
     },
     {
       "name": "世界经济论坛（WEF）",
@@ -145,7 +190,10 @@
       "url": "https://www.weforum.org/",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": ["wef", "world economic forum"]
+      "filename_hints": [
+        "wef",
+        "world economic forum"
+      ]
     },
     {
       "name": "彼得森国际经济研究所（PIIE）",
@@ -153,15 +201,20 @@
       "url": "https://www.piie.com/",
       "enabled": true,
       "scrape": "manual",
-      "filename_hints": ["piie", "peterson"]
+      "filename_hints": [
+        "piie",
+        "peterson"
+      ]
     },
     {
       "name": "布鲁盖尔研究所（Bruegel）",
       "key": "bruegel",
       "url": "https://www.bruegel.org/",
       "enabled": true,
-      "scrape": "manual",
-      "filename_hints": ["bruegel"]
+      "scrape": "auto",
+      "filename_hints": [
+        "bruegel"
+      ]
     }
   ]
 }
