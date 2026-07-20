@@ -66,6 +66,34 @@ _BUILTIN_INSTITUTION_KEYWORDS: dict[str, list] = {
 
 _DEFAULT_STYLE_GUIDE = "- 偏数据叙事\n- 关注核心发现和趋势\n- 政策启示侧重可借鉴经验"
 
+# ── 内置 Manual Links（引导链接，用于手动抓取来源）──
+
+_BUILTIN_MANUAL_LINKS: dict[str, list[dict]] = {
+    "imf": [
+        {"title": "IMF Working Papers", "url": "https://www.imf.org/en/publications/wp"},
+        {"title": "IMF Global Financial Stability Report", "url": "https://www.imf.org/en/publications/gfsr"},
+        {"title": "IMF World Economic Outlook", "url": "https://www.imf.org/en/publications/weo"},
+    ],
+    "ecb": [
+        {"title": "ECB 货币政策声明", "url": "https://www.ecb.europa.eu/press/pressconf/"},
+        {"title": "ECB 经济公报", "url": "https://www.ecb.europa.eu/pub/economic-bulletin/"},
+    ],
+    "bis": [
+        {"title": "BIS 出版物", "url": "https://www.bis.org/publ/"},
+    ],
+    "boe": [
+        {"title": "BOE 货币政策摘要与会议纪要", "url": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes"},
+        {"title": "BOE 货币政策报告", "url": "https://www.bankofengland.co.uk/monetary-policy-report"},
+    ],
+    "fed": [
+        {"title": "Fed 褐皮书 (Beige Book)", "url": "https://www.federalreserve.gov/monetarypolicy/beige-book-default.htm"},
+    ],
+}
+
+# ── Fetcher 注册表（sources.py 在 import 时注册）──
+
+_fetcher_registry: dict[str, object] = {}
+
 # 模块级来源注册表（load_sources 填充）
 _sources: dict[str, Source] = {}
 
@@ -73,6 +101,14 @@ _sources: dict[str, Source] = {}
 # ═══════════════════════════════════════════
 #  公开 API
 # ═══════════════════════════════════════════
+
+def register_fetcher(key: str, fetcher) -> None:
+    """
+    注册来源抓取函数。sources.py 在 import 时调用。
+    load_sources() 会自动将注册的 fetcher 赋值给对应 Source。
+    """
+    _fetcher_registry[key.lower().strip()] = fetcher
+
 
 def load_sources(config_sources: list[dict]) -> dict[str, Source]:
     """
@@ -97,6 +133,8 @@ def load_sources(config_sources: list[dict]) -> dict[str, Source]:
             icon=_BUILTIN_ICONS.get(key, "📄"),
             institution_keywords=_BUILTIN_INSTITUTION_KEYWORDS.get(key, []),
             source_year=entry.get("source_year"),
+            manual_links=_BUILTIN_MANUAL_LINKS.get(key, []),
+            fetcher=_fetcher_registry.get(key),
         )
         _sources[key] = source
     return _sources

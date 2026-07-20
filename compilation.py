@@ -45,20 +45,22 @@ class CompilationWorkflow:
 
     # ── 公开接口 ──────────────────────────────────────
 
-    def compile(self, paper: dict, pdf_path: str) -> CompileResult:
+    def compile(self, paper: dict, pdf_path: str,
+                on_chunk=None) -> CompileResult:
         """
         执行完整 AI 编译流水线：
         1. 提取 PDF 文本
-        2. 调用 AI API
-        3. 在 vault 中创建草稿 .md
-        4. 更新 frontmatter status → "编译中"
-        5. 将 AI 生成内容写入正文
+        2. 调用 AI API（支持流式回调）
+        3. 在 vault 中创建草稿 .md（一次写入，含 AI 内容）
+        4. 更新内存索引
 
         paper 字典需要的键（中英文均可）:
           title/标题, date/日期, source/来源, authors/作者,
           paper_type/类型, detail_url, pdf_url, report_number
+
+        on_chunk: 可选回调，接收每个增量文本片段用于流式展示
         """
-        pdf_text, success, content = self._call_ai(pdf_path, paper)
+        pdf_text, success, content = self._call_ai(pdf_path, paper, on_chunk=on_chunk)
         if not pdf_text:
             return CompileResult(success=False, content="PDF 文本提取失败或为空")
         if not success:
@@ -66,14 +68,13 @@ class CompilationWorkflow:
 
         paper_normalized = self._normalize_paper(paper)
 
-        # 在 vault 中创建草稿（传入 pdf_text 以预填元数据）
+        # 一次写入：frontmatter + AI 内容，status 自动设为 "编译中"
         try:
-            filepath = self.vault.create_draft(paper_normalized, pdf_text)
+            filepath = self.vault.create_draft(
+                paper_normalized, pdf_text, content=content
+            )
         except Exception as e:
             return CompileResult(success=False, content=str(e))
-
-        # 更新 frontmatter + 替换正文
-        self._apply_ai_result(filepath, content, revision_note="")
 
         return CompileResult(
             success=True,
@@ -120,7 +121,7 @@ class CompilationWorkflow:
 
     # ── 内部方法 ──────────────────────────────────────
 
-    def _call_ai(self, pdf_path: str, paper: dict) -> tuple:
+    def _call_ai(self, pdf_path: str, paper: dict, on_chunk=None) -> tuple:
         """提取 PDF 文本并调用 AI 编译。返回 (pdf_text, success, content)。"""
         pdf_text = extract_pdf_text(pdf_path)
         if not pdf_text:
@@ -133,6 +134,7 @@ class CompilationWorkflow:
             paper_date=paper_norm.get("date", ""),
             paper_type=paper_norm.get("paper_type", ""),
             config=self.config,
+            on_chunk=on_chunk,
         )
         return pdf_text, success, content
 

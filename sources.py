@@ -24,13 +24,18 @@ CACHE_DIR = os.path.join(os.path.dirname(__file__), "cache")
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 # ── 源注册表 ──────
-from source import Source
+from source import Source, register_fetcher as _reg_fetcher
 
+# [已弃用] SOURCE_REGISTRY — 新代码请使用 source.get_source(key).fetcher
 SOURCE_REGISTRY: dict[str, Source] = {}
 
 
 def register_fetcher(key: str, fetcher, manual_links: list[dict] = None):
-    """注册来源：创建 Source 实例并存入注册表。fetcher 为抓取函数。"""
+    """
+    [已弃用] 请使用 source.register_fetcher(key, fetcher)。
+    保留此函数以维护向后兼容。
+    """
+    _reg_fetcher(key, fetcher)  # 委托给 source.py 的统一注册表
     source = Source(
         key=key, name=key.upper(), url="",
         fetcher=fetcher,
@@ -40,9 +45,14 @@ def register_fetcher(key: str, fetcher, manual_links: list[dict] = None):
 
 
 def get_fetcher(key: str):
-    """获取抓取函数，未注册返回 None"""
-    source = SOURCE_REGISTRY.get(key)
-    return source.fetcher if source else None
+    """获取抓取函数。优先从 source.py 注册表，fallback 本地。"""
+    from source import get_source
+    src = get_source(key)
+    if src and src.fetcher:
+        return src.fetcher
+    # 向后兼容 fallback
+    local = SOURCE_REGISTRY.get(key)
+    return local.fetcher if local else None
 
 
 # 向后兼容别名
@@ -119,40 +129,11 @@ IMF_WEO_URL = "https://www.imf.org/en/publications/weo"
 
 
 def fetch_imf(cache_ttl: int = 60) -> list[dict]:
-    """IMF 网站有 Akamai 机器人保护，无法程序化抓取。返回引导链接。"""
-    # 占位条目使用固定日期以便日期筛选生效
-    return [
-        {
-            "title": "→ 打开 IMF Working Papers 页面浏览下载",
-            "date": "2099-12-31",
-            "source": "IMF",
-            "authors": "",
-            "paper_type": "🌐 手动浏览",
-            "detail_url": IMF_WP_URL,
-            "pdf_url": "",
-            "report_number": "",
-        },
-        {
-            "title": "→ 打开 IMF Global Financial Stability Report",
-            "date": "2099-12-31",
-            "source": "IMF",
-            "authors": "",
-            "paper_type": "🌐 手动浏览",
-            "detail_url": IMF_GFSR_URL,
-            "pdf_url": "",
-            "report_number": "",
-        },
-        {
-            "title": "→ 打开 IMF World Economic Outlook",
-            "date": "2099-12-31",
-            "source": "IMF",
-            "authors": "",
-            "paper_type": "🌐 手动浏览",
-            "detail_url": IMF_WEO_URL,
-            "pdf_url": "",
-            "report_number": "",
-        },
-    ]
+    """
+    IMF 网站有 Akamai 机器人保护，程序化抓取不可用。
+    引导链接已移至 source.py 的 _BUILTIN_MANUAL_LINKS，由 app.py 直接渲染。
+    """
+    return []
 
 
 # ═══════════════════════════════════════════
@@ -223,7 +204,7 @@ def fetch_boj(cache_ttl: int = 60, source_config: dict = None) -> list[dict]:
                     source="BOJ",
                     authors="",
                     paper_type=default_type,
-                    detail_url=url,
+                    detail_url=pdf_url,     # 使用 PDF URL 确保唯一性
                     pdf_url=pdf_url,
                     report_number="",
                 )))
@@ -499,13 +480,8 @@ ECB_BULL_URL = "https://www.ecb.europa.eu/pub/economic-bulletin/"
 
 
 def fetch_ecb(cache_ttl: int = 60) -> list[dict]:
-    """ECB 网站 JS 渲染，暂无法程序化抓取。返回引导链接。"""
-    return [
-        {"title": "→ 打开 ECB 货币政策声明页面", "date": "2099-12-31", "source": "ECB", "authors": "",
-         "paper_type": "🌐 手动浏览", "detail_url": ECB_MP_URL, "pdf_url": "", "report_number": ""},
-        {"title": "→ 打开 ECB 经济公报页面", "date": "2099-12-31", "source": "ECB", "authors": "",
-         "paper_type": "🌐 手动浏览", "detail_url": ECB_BULL_URL, "pdf_url": "", "report_number": ""},
-    ]
+    """ECB 网站 JS 渲染，程序化抓取暂不可用。引导链接在 source.py 的 _BUILTIN_MANUAL_LINKS 中。"""
+    return []
 
 
 # ── BIS ──
@@ -513,10 +489,8 @@ BIS_PUB_URL = "https://www.bis.org/publ/"
 
 
 def fetch_bis(cache_ttl: int = 60) -> list[dict]:
-    return [
-        {"title": "→ 打开 BIS 出版物页面（年度报告、季度回顾等）", "date": "2099-12-31", "source": "BIS", "authors": "",
-         "paper_type": "🌐 手动浏览", "detail_url": BIS_PUB_URL, "pdf_url": "", "report_number": ""},
-    ]
+    """BIS 出版物引导链接已移至 source.py 的 _BUILTIN_MANUAL_LINKS。"""
+    return []
 
 
 # ── Fed ──
@@ -593,21 +567,17 @@ BOE_REPORT_URL = "https://www.bankofengland.co.uk/monetary-policy-report"
 
 
 def fetch_boe(cache_ttl: int = 60) -> list[dict]:
-    return [
-        {"title": "→ 打开 BOE 货币政策摘要与会议纪要", "date": "2099-12-31", "source": "BOE", "authors": "",
-         "paper_type": "🌐 手动浏览", "detail_url": BOE_MPC_URL, "pdf_url": "", "report_number": ""},
-        {"title": "→ 打开 BOE 货币政策报告", "date": "2099-12-31", "source": "BOE", "authors": "",
-         "paper_type": "🌐 手动浏览", "detail_url": BOE_REPORT_URL, "pdf_url": "", "report_number": ""},
-    ]
+    """BOE 引导链接已移至 source.py 的 _BUILTIN_MANUAL_LINKS 中。"""
+    return []
 
 
 # ═══════════════════════════════════════════
-#  源注册（新增来源在此注册 + config.json 添加条目即可）
+#  源注册（新增来源在此注册 fetcher 即可）
 # ═══════════════════════════════════════════
 
-register_fetcher("imf", fetch_imf)
-register_fetcher("boj", fetch_boj)
-register_fetcher("ecb", fetch_ecb)
-register_fetcher("bis", fetch_bis)
-register_fetcher("fed", fetch_fed)
-register_fetcher("boe", fetch_boe)
+_reg_fetcher("imf", fetch_imf)
+_reg_fetcher("boj", fetch_boj)
+_reg_fetcher("ecb", fetch_ecb)
+_reg_fetcher("bis", fetch_bis)
+_reg_fetcher("fed", fetch_fed)
+_reg_fetcher("boe", fetch_boe)

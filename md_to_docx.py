@@ -264,38 +264,38 @@ def generate_report(data: dict, output_path: str) -> None:
         elif level == 2:
             _add_h2(doc, title)
 
-        if body_text:
+        if not body_text:
+            continue
+
+        if level == 1:
+            # 一级章节：按（一）（二）拆分处理子节和正文
+            sub_parts = re.split(r'\n(?=（[一二三四五六七八九十]）)', body_text)
+            for sp in sub_parts:
+                sp = sp.strip()
+                if not sp:
+                    continue
+                h2_match = re.match(r'（([一二三四五六七八九十])）(.+)', sp)
+                if h2_match:
+                    sub_num = h2_match.group(1)
+                    rest_text = h2_match.group(2)
+                    sub_title = f"（{sub_num}）{rest_text.split(chr(10))[0].strip()}"
+                    _add_h2(doc, sub_title)
+                    rest = "\n".join(rest_text.split("\n")[1:]).strip()
+                    for rp in rest.split("\n"):
+                        rp = rp.strip()
+                        if rp and not re.match(r'（[一二三四五六七八九十]）', rp):
+                            _add_body(doc, rp)
+                else:
+                    for rp in sp.split("\n"):
+                        rp = rp.strip()
+                        if rp:
+                            _add_body(doc, rp)
+        else:
+            # 二级及以下：逐段输出（跳过已处理的子标题行）
             for para in body_text.split("\n"):
                 stripped = para.strip()
                 if stripped and not stripped.startswith("（") and not re.match(r'[一二三四五六七八九十]、', stripped):
                     _add_body(doc, stripped)
-                elif stripped:
-                    # 子标题行已在上面处理
-                    pass
-
-            # 子节内容按 (一) (二) 拆分并独立处理
-            if level == 1:
-                sub_parts = re.split(r'\n(?=（[一二三四五六七八九十]）)', body_text)
-                for sp in sub_parts:
-                    sp = sp.strip()
-                    if not sp:
-                        continue
-                    h2_match = re.match(r'（([一二三四五六七八九十])）(.+)', sp)
-                    if h2_match:
-                        sub_num = h2_match.group(1)
-                        rest_text = h2_match.group(2)
-                        sub_title = f"（{sub_num}）{rest_text.split(chr(10))[0].strip()}"
-                        _add_h2(doc, sub_title)
-                        rest = "\n".join(rest_text.split("\n")[1:]).strip()
-                        for rp in rest.split("\n"):
-                            rp = rp.strip()
-                            if rp and not re.match(r'（[一二三四五六七八九十]）', rp):
-                                _add_body(doc, rp)
-                    else:
-                        for rp in sp.split("\n"):
-                            rp = rp.strip()
-                            if rp:
-                                _add_body(doc, rp)
 
     # 标签
     tags = data.get("tags", [])

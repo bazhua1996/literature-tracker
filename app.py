@@ -59,7 +59,22 @@ CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
 
 def load_config() -> dict:
     with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+        cfg = json.load(f)
+    local_path = os.path.join(os.path.dirname(__file__), "config.local.json")
+    if os.path.exists(local_path):
+        with open(local_path, "r", encoding="utf-8") as f:
+            local_cfg = json.load(f)
+        _deep_merge(cfg, local_cfg)
+    return cfg
+
+
+def _deep_merge(base: dict, override: dict) -> None:
+    """递归合并 override 到 base（原地修改 base）。"""
+    for key, val in override.items():
+        if key in base and isinstance(base[key], dict) and isinstance(val, dict):
+            _deep_merge(base[key], val)
+        else:
+            base[key] = val
 
 
 config = load_config()
@@ -261,6 +276,7 @@ else:
             src_icon = "📁"
             src_full_name = "本地"
             is_manual_source = True
+            source_obj = None
         else:
             source_obj = get_source(src)
             src_icon = source_obj.icon if source_obj else "📄"
@@ -268,6 +284,15 @@ else:
             is_manual_source = (source_obj.scrape == "manual") if source_obj else True
 
         with st.expander(f"{src_icon} {src_full_name}（{src_count} 篇）", expanded=True):
+            # ── 手动来源引导链接 ──
+            if source_obj and source_obj.manual_links:
+                st.caption("🌐 在线浏览：")
+                link_cols = st.columns(min(len(source_obj.manual_links), 4))
+                for i, link in enumerate(source_obj.manual_links):
+                    with link_cols[i % len(link_cols)]:
+                        st.link_button(link["title"], link["url"])
+                st.divider()
+
             for idx, (orig_idx, paper) in enumerate(src_df.iterrows()):
                 title = paper.get("标题", "Unknown")
                 date = paper.get("日期", "")
@@ -545,52 +570,33 @@ else:
                                     unsafe_allow_html=True,
                                 )
                                 char_counter.caption(f"已生成 {len(_streamed[0])} 字符...")
-                            # 使用 on_chunk 的 compile_with_ai —— 暂时复用 compile 方法
-                            # compile 内部调用 compile_with_ai 但 on_chunk 未传递
-                            # 所以直接在此调用 compile_with_ai + 后续处理
-                            from ai_compile import compile_with_ai as _cwa
-                            pdf_text = extract_pdf_text(pdf_path_ai)
-                            success, content = _cwa(
-                                pdf_text,
-                                source_key=src.lower(),
-                                paper_title=str(title),
-                                paper_date=date,
-                                paper_type=ptype,
-                                config=config,
-                                on_chunk=_on_chunk,
-                            )
+                            paper_data = {
+                                "title": cn_title or str(title), "date": date, "source": src,
+                                "authors": paper.get("作者", ""),
+                                "paper_type": ptype, "detail_url": detail_url,
+                                "pdf_url": pdf_url, "report_number": paper.get("report_number", ""),
+                            }
+                            try:
+                                result = workflow.compile(paper_data, pdf_path_ai, on_chunk=_on_chunk)
+                            except Exception as exc:
+                                import traceback
+                                result = None
+                                _traceback = traceback.format_exc()
                             output_placeholder.empty()
                             char_counter.empty()
 
-                            if success and content:
-                                paper_data = {
-                                    "title": cn_title or str(title), "date": date, "source": src,
-                                    "authors": paper.get("作者", ""),
-                                    "paper_type": ptype, "detail_url": detail_url,
-                                    "pdf_url": pdf_url, "report_number": paper.get("report_number", ""),
-                                }
-                                try:
-                                    filepath = vault.create_draft(paper_data, pdf_text)
-                                    vault.update_frontmatter(filepath, {"status": "编译中"})
-                                    # 替换正文为 AI 内容
-                                    with open(filepath, "r", encoding="utf-8") as f:
-                                        existing = f.read()
-                                    end = existing.find("---", 3)
-                                    if end != -1:
-                                        new_body = existing[:end + 3] + "\n\n" + content
-                                    else:
-                                        new_body = f"---\nstatus: 编译中\n---\n\n{content}"
-                                    with open(filepath, "w", encoding="utf-8") as f:
-                                        f.write(new_body)
-                                    st.session_state.download_log.append(f"🤖 {os.path.basename(filepath)}")
-                                    status_box.update(label=f"✅ AI 编译完成: {os.path.basename(filepath)}", state="complete")
-                                    _invalidate_caches("vault")
-                                except Exception as e:
-                                    status_box.update(label=f"❌ 保存失败: {e}", state="error")
+                            if result is None:
+                                st.error("❌ AI 编译异常")
+                                st.code(_traceback, language=None)
+                                status_box.update(label="❌ AI 编译异常", state="error")
+                            elif result.success:
+                                st.session_state.download_log.append(f"🤖 {os.path.basename(result.filepath)}")
+                                status_box.update(label=f"✅ AI 编译完成: {os.path.basename(result.filepath)}", state="complete")
+                                _invalidate_caches("vault")
                             else:
                                 st.error(f"❌ AI 编译失败")
-                                if content:
-                                    st.code(content, language=None)
+                                if result.content:
+                                    st.code(result.content, language=None)
                                 status_box.update(label="❌ AI 编译失败", state="error")
                             if st.button("✖ 关闭", key=f"close_ai_{src}_{orig_idx}"):
                                 st.session_state[run_key] = False
@@ -739,7 +745,7 @@ with st.sidebar:
                     config["sources"][i]["scrape"] = "manual" if scrape_type == "auto" else "auto"
                     with open(CONFIG_PATH, "w", encoding="utf-8") as cf:
                         json.dump(config, cf, ensure_ascii=False, indent=2)
-                    _invalidate_caches("all")
+                    _invalidate_caches("papers")
                     st.rerun()
             with col_s3:
                 if st.button("⏸️ 禁用" if src.get("enabled", True) else "✅ 启用",
@@ -747,14 +753,14 @@ with st.sidebar:
                     config["sources"][i]["enabled"] = not src.get("enabled", True)
                     with open(CONFIG_PATH, "w", encoding="utf-8") as cf:
                         json.dump(config, cf, ensure_ascii=False, indent=2)
-                    _invalidate_caches("all")
+                    _invalidate_caches("papers")
                     st.rerun()
             with col_s4:
                 if st.button("🗑️", key=f"del_{src['key']}", help=f"删除 {src['name']}"):
                     del config["sources"][i]
                     with open(CONFIG_PATH, "w", encoding="utf-8") as cf:
                         json.dump(config, cf, ensure_ascii=False, indent=2)
-                    _invalidate_caches("all")
+                    _invalidate_caches("papers")
                     st.rerun()
 
         st.divider()
@@ -779,7 +785,7 @@ with st.sidebar:
                 with open(CONFIG_PATH, "w", encoding="utf-8") as cf:
                     json.dump(config, cf, ensure_ascii=False, indent=2)
                 st.toast(f"✅ 已添加来源: {new_name.strip()}")
-                st.cache_data.clear()
+                _invalidate_caches("papers")
                 st.rerun()
 
     st.divider()

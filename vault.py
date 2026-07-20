@@ -215,19 +215,24 @@ class Vault:
 
     # ── 变更 API ────────────────────────────────
 
-    def create_draft(self, paper: dict, pdf_text: str = "") -> str:
+    def create_draft(self, paper: dict, pdf_text: str = "",
+                      content: str = "") -> str:
         """
         在 vault 中创建编译草稿 .md 文件。
+
         若提供 pdf_text，自动预填引用行和摘要中的关键数据。
+        若提供 content（AI 编译结果），直接作为正文（跳过模板），
+        status 设为 "编译中"。
         返回创建的文件路径。出错抛异常。
         """
         title = paper.get("title", "Untitled")
         date = paper.get("date", datetime.now().strftime("%Y-%m-%d"))
         source = paper.get("source", "Unknown")
         pdf_meta = guess_metadata_from_pdf(pdf_text) if pdf_text else {}
+        has_content = bool(content)
 
-        # 标题优先使用 PDF 检测到的
-        display_title = pdf_meta.get("title") or title
+        # 文件名使用 paper title（可靠来源），不用 PDF 猜测（易产生乱码）
+        display_title = title
 
         # 生成文件名: YYYY-MM-DD SOURCE-Title.md
         safe_title = re.sub(r'[\\/:*?"<>|]', '_', display_title)[:80]
@@ -244,7 +249,7 @@ class Vault:
 
         # 构建 frontmatter
         fm = {
-            "status": "已发现",
+            "status": "编译中" if has_content else "已发现",
             "paper": {
                 "title": title,
                 "date": date,
@@ -259,28 +264,32 @@ class Vault:
             "created": datetime.now().strftime("%Y-%m-%d"),
         }
 
-        # 构建 citation 行
-        citation_parts = []
-        if pdf_meta.get("title"):
-            citation_parts.append(pdf_meta["title"])
+        # 构建 Markdown 正文
+        if has_content:
+            body = f"---\n{yaml.dump(fm, allow_unicode=True, default_flow_style=False)}---\n\n{content}"
         else:
-            citation_parts.append(paper.get("paper_type", ""))
-        if pdf_meta.get("institution"):
-            citation_parts.append(pdf_meta["institution"])
-        else:
-            citation_parts.append(source)
-        if pdf_meta.get("date") or date:
-            citation_parts.append(pdf_meta.get("date") or date)
-        citation_line = " | ".join(citation_parts)
+            # 构建 citation 行
+            citation_parts = []
+            if pdf_meta.get("title"):
+                citation_parts.append(pdf_meta["title"])
+            else:
+                citation_parts.append(paper.get("paper_type", ""))
+            if pdf_meta.get("institution"):
+                citation_parts.append(pdf_meta["institution"])
+            else:
+                citation_parts.append(source)
+            if pdf_meta.get("date") or date:
+                citation_parts.append(pdf_meta.get("date") or date)
+            citation_line = " | ".join(citation_parts)
 
-        # 构建摘要预填
-        abstract_hint = ""
-        if pdf_meta.get("key_figures"):
-            figures_text = "、".join(pdf_meta["key_figures"][:8])
-            abstract_hint = f"报告显示，{figures_text}。"
+            # 构建摘要预填
+            abstract_hint = ""
+            if pdf_meta.get("key_figures"):
+                figures_text = "、".join(pdf_meta["key_figures"][:8])
+                abstract_hint = f"报告显示，{figures_text}。"
 
-        # 构建 Markdown 正文（按编译规范模板）
-        body = f"""---
+            # 构建 Markdown 正文（按编译规范模板）
+            body = f"""---
 {yaml.dump(fm, allow_unicode=True, default_flow_style=False)}---
 
 # 关于{source}《{display_title}》的分析

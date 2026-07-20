@@ -1,8 +1,7 @@
 {
   "ai": {
     "api_base": "https://api.deepseek.com",
-    "api_key": "sk-ac532231afe5475a876e1ca96f4404f3",
-    "model": "deepseek-v4-flash"
+"model": "deepseek-v4-flash"
   },
   "download_dir": "D:\\搭建知识库\\个人工作流\\成长日记\\Attachments\\PDFs",
   "export_dir": "D:\\搭建知识库\\个人工作流\\成长日记\\Attachments",
